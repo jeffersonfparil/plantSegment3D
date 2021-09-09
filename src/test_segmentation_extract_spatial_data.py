@@ -9,7 +9,9 @@ os.chdir("/home/jeff/Documents/plantSegment3D/")
 from src.ply_reader import read_ply
 
 ### extract data
-data = read_ply("res/At_test.ply")
+data = read_ply("res/Lr_test.ply")
+# data = read_ply("res/Lr_plates.ply")
+# data = read_ply("res/At_test.ply")
 X = data['points'] ### extract datapoints as pandas array
 
 ### invert z orientation so that the tray isn't upsidedown by default
