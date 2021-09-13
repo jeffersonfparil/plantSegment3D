@@ -10,6 +10,9 @@ from src.ply_reader import read_ply
 
 ### extract data
 data = read_ply("res/Lr_test.ply")
+
+data = PyntCloud.from_file("res/Lr_test.ply")
+
 # data = read_ply("res/Lr_plates.ply")
 # data = read_ply("res/At_test.ply")
 X = data['points'] ### extract datapoints as pandas array
