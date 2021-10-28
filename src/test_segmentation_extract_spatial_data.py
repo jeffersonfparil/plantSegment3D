@@ -1,21 +1,25 @@
 ### test segmentation and extraction of spatial colorimetric data
 import os
+from pyntcloud import PyntCloud
 import numpy as np
 import open3d as o3d
 import matplotlib.pyplot as plt
 import random
 
-os.chdir("/home/jeff/Documents/plantSegment3D/")
-from src.ply_reader import read_ply
 
-### extract data
-data = read_ply("res/Lr_test.ply")
+# os.chdir("/home/jeff/Documents/plantSegment3D/")
+# from src.ply_reader import read_ply
+
+# ### extract data
+# data = read_ply("res/Lr_test.ply")
 
 data = PyntCloud.from_file("res/Lr_test.ply")
+# data = PyntCloud.from_file("/home/jeff/Downloads/psx-0176-Lolium_seedlings.ply")
 
 # data = read_ply("res/Lr_plates.ply")
 # data = read_ply("res/At_test.ply")
-X = data['points'] ### extract datapoints as pandas array
+# X = data['points'] ### extract datapoints as pandas array
+X = data.points
 
 ### invert z orientation so that the tray isn't upsidedown by default
 z_max = max(X["z"])
