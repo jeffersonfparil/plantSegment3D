@@ -61,3 +61,5 @@ def fun_ply_plot(X, vec_coordinate_names=["x", "y", "z"], vec_colours=["red", "g
     pcd.colors = o3d.utility.Vector3dVector(mat_colours)
     ### plot
     o3d.visualization.draw_geometries([pcd], point_show_normal=True)
+
+
