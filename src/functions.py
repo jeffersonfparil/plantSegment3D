@@ -5,39 +5,59 @@
 ### import libraries
 import os
 import numpy as np
+import pandas as pd
 import open3d as o3d
 import matplotlib.pyplot as plt
 import random
 from pyntcloud import PyntCloud
 
-### Read ply files and extract point cloud information
-def fun_ply_read(fname):
+### Read ply file and output point cloud information (also inver the z-axis)
+def fun_ply_read(fname, invert=False):
     ################################################
     ### TEST:
     # fname = "/home/jeff/Documents/plantSegment3D/res/Lr_test.ply"
     # X = fun_ply_read(fname)
     ################################################
     data = PyntCloud.from_file(fname)
-    X = data.points
-    return(X)
+    if (invert):
+        data.points.z = -data.points.z
+        # data.xyz[:,2] = -data.xyz[:,2]
+        # data.centroid[2] = -data.centroid[2]
+    return(data.points) ### ouput pandas array
+
+### Save point cloud into a ply file
+def fun_ply_save(pd_points, fname="ouput.ply"):
+    ################################################
+    ### TEST:
+    # fname = "/home/jeff/Documents/plantSegment3D/res/Lr_test.ply"
+    # pd_points = fun_ply_read(fname, invert=True)
+    ################################################
+    cloud = PyntCloud(
+                pd.DataFrame(data=pd_points.to_numpy(),
+                             columns=pd_points.axes[-1].to_numpy()
+                            )
+            )
+    cloud.to_file(fname)
+    return(0)
 
 ### plot 3D cloud models
-def fun_ply_plot(X, vec_coordinate_names=["x", "y", "z"], vec_colours=["red", "green", "blue"], colour_max_value=255):
+def fun_ply_plot(pd_points, vec_coordinate_names=["x", "y", "z"], vec_colours=["red", "green", "blue"], colour_max_value=255):
     ################################################
     ### TEST
     # fname = "/home/jeff/Documents/plantSegment3D/res/Lr_test.ply"
-    # fname = "/home/jeff/Downloads/weedomics_large_files/1.d.2._Intercept/1_d_2_A_1-D05.ply"
-    # X = fun_ply_read(fname)
+    # fname = "/home/jeff/Documents/plantSegment3D/res/Lr_plates.ply"
+    # pd_points = fun_ply_read(fname, invert=True)
+    # fun_ply_save(pd_points)
     # vec_coordinate_names = ["x", "y", "z"]
     # vec_colours = ["red", "green", "blue"]
     # # vec_colours = ["ndvi"]
     # colour_max_value = 255
-    # fun_ply_plot(X, vec_colours=vec_colours)
+    # fun_ply_plot(pd_points, vec_colours=vec_colours)
     ################################################
     ### extract coordiantes
-    mat_coordinates = X[vec_coordinate_names].to_numpy()
+    mat_coordinates = pd_points[vec_coordinate_names].to_numpy()
     ### extract colours
-    mat_colours = X[vec_colours].to_numpy() / colour_max_value
+    mat_colours = pd_points[vec_colours].to_numpy() / colour_max_value
     if mat_colours.shape[1] < 3:
         m = mat_colours.shape[0]
         n = 3 - mat_colours.shape[1]
@@ -49,7 +69,7 @@ def fun_ply_plot(X, vec_coordinate_names=["x", "y", "z"], vec_colours=["red", "g
             mat_replicates[:,1] = 0.0
             cmap = plt.get_cmap("viridis")
             colours = cmap(np.linspace(0,1,2**8))[:,0:3]
-            mat_colours = colours[X[vec_colours].to_numpy().ravel()]
+            mat_colours = colours[pd_points[vec_colours].to_numpy().ravel()]
         else:
             ### 2 colour channels, wth the input vectors in the red and green channels; while the blue channel is all zeros
             mat_replicates = np.zeros((m,n)) 
@@ -61,5 +81,7 @@ def fun_ply_plot(X, vec_coordinate_names=["x", "y", "z"], vec_colours=["red", "g
     pcd.colors = o3d.utility.Vector3dVector(mat_colours)
     ### plot
     o3d.visualization.draw_geometries([pcd], point_show_normal=True)
+
+
 
 
