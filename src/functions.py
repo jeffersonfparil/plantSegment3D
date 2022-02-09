@@ -44,8 +44,7 @@ def fun_ply_save(pd_points, fname="ouput.ply"):
 def fun_ply_plot(pd_points, vec_coordinate_names=["x", "y", "z"], vec_colours=["red", "green", "blue"], colour_max_value=255):
     ################################################
     ### TEST
-    # fname = "/home/jeff/Documents/plantSegment3D/res/Lr_test.ply"
-    # fname = "/home/jeff/Documents/plantSegment3D/res/Lr_plates.ply"
+    # fname = "/home/jeffersonfparil/Downloads/data/Phenospex_scans/109_113-Glyphosate-ACC092_ACC091-REP2_1.ply"
     # pd_points = fun_ply_read(fname, invert=True)
     # fun_ply_save(pd_points)
     # vec_coordinate_names = ["x", "y", "z"]
@@ -80,7 +79,7 @@ def fun_ply_plot(pd_points, vec_coordinate_names=["x", "y", "z"], vec_colours=["
     pcd.points = o3d.utility.Vector3dVector(mat_coordinates)
     pcd.colors = o3d.utility.Vector3dVector(mat_colours)
     ### plot
-    o3d.visualization.draw_geometries([pcd], point_show_normal=True)
+    o3d.visualization.draw_geometries([pcd])
 
 
 
